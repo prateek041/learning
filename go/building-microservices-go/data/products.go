@@ -18,12 +18,27 @@ type Product struct {
 	DeletedOn   string  `json:"-"`
 }
 
+func (p *Product) FromJson(r io.Reader) error {
+	decoder := json.NewDecoder(r)
+	return decoder.Decode(p)
+}
+
 // Products is a collection of Product
 type Products []*Product
 
 // Get Products returns a list of Products.
 func GetProducts() Products {
 	return ProductList
+}
+
+func AddProducts(product *Product) {
+	product.ID = getNextId()
+	ProductList = append(ProductList, product)
+}
+
+func getNextId() int {
+	product := ProductList[len(ProductList)-1]
+	return product.ID + 1
 }
 
 // ToJSON serializes the contents of the collection to JSON
