@@ -3,7 +3,9 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/prateek041/microservices/data"
 )
 
@@ -15,21 +17,7 @@ func NewProducts(l *log.Logger) *Product {
 	return &Product{l}
 }
 
-func (p *Product) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		p.getProducts(rw, r)
-		return
-	}
-
-	if r.Method == http.MethodPost {
-		p.addProduct(rw, r)
-		return
-	}
-	// catch all statement
-	rw.WriteHeader(http.StatusMethodNotAllowed)
-}
-
-func (p *Product) getProducts(rw http.ResponseWriter, r *http.Request) {
+func (p *Product) GetProducts(rw http.ResponseWriter, r *http.Request) {
 	p.l.Println("Handle GET Products")
 	products := data.GetProducts()
 	err := products.ToJson(rw)
@@ -38,7 +26,7 @@ func (p *Product) getProducts(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (p *Product) addProduct(rw http.ResponseWriter, r *http.Request) {
+func (p *Product) AddProduct(rw http.ResponseWriter, r *http.Request) {
 	p.l.Println("Handle POST Products")
 
 	// create an empty product struct
@@ -49,4 +37,31 @@ func (p *Product) addProduct(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "Unable to Unmarshal json", http.StatusInternalServerError)
 	}
 	data.AddProducts(prod)
+}
+
+func (p *Product) UpdateProduct(rw http.ResponseWriter, r *http.Request) {
+	p.l.Println("Handle Put Products")
+
+	prm := mux.Vars(r)
+	id, err := strconv.Atoi(prm["id"])
+	if err != nil {
+		http.Error(rw, "Unable to convert Id", http.StatusBadRequest)
+	}
+
+	prod := &data.Product{}
+	err = prod.FromJson(r.Body)
+	if err != nil {
+		http.Error(rw, "Unable to unmarshal JSON", http.StatusBadRequest)
+	}
+
+	err = data.UpdateProduct(id, prod)
+	if err == data.ErrProductNotFound {
+		http.Error(rw, "Product not Foound", http.StatusNotFound)
+		return
+	}
+
+	if err != nil {
+		http.Error(rw, "Product not found", http.StatusInternalServerError)
+		return
+	}
 }

@@ -8,15 +8,22 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/prateek041/microservices/handlers"
 )
 
 func main() {
 	l := log.New(os.Stdout, "test-app", log.LstdFlags)
 	ph := handlers.NewProducts(l)
-	sm := http.NewServeMux()
+	sm := mux.NewRouter()
 
-	sm.Handle("/", ph)
+	getRouter := sm.Methods(http.MethodGet).Subrouter()
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
+
+	getRouter.HandleFunc("/", ph.GetProducts)
+	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProduct)
+	postRouter.HandleFunc("/", ph.AddProduct)
 
 	s := http.Server{
 		Addr:         ":9090",

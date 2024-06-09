@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"time"
 )
@@ -39,6 +40,30 @@ func AddProducts(product *Product) {
 func getNextId() int {
 	product := ProductList[len(ProductList)-1]
 	return product.ID + 1
+}
+
+var ErrProductNotFound = fmt.Errorf("Product Not Found")
+
+func UpdateProduct(id int, prod *Product) error {
+	_, pos, err := findProduct(id)
+	if err != nil {
+		return err
+	}
+
+	prod.ID = id
+	ProductList[pos] = prod
+
+	return nil
+}
+
+func findProduct(id int) (*Product, int, error) {
+	for index, prod := range ProductList {
+		if prod.ID == id {
+			return prod, index, nil
+		}
+	}
+
+	return nil, -1, ErrProductNotFound
 }
 
 // ToJSON serializes the contents of the collection to JSON
