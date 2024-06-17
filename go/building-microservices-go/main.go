@@ -18,12 +18,15 @@ func main() {
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
-	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	putRouter := sm.Methods(http.MethodPut).Subrouter()
-
 	getRouter.HandleFunc("/", ph.GetProducts)
+
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
 	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProduct)
+	putRouter.Use(ph.MiddlewareValidateProduct)
+
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.Use(ph.MiddlewareValidateProduct)
 
 	s := http.Server{
 		Addr:         ":9090",
@@ -39,6 +42,8 @@ func main() {
 		if err != nil {
 			l.Fatal(err)
 		}
+
+		log.Println("[MESSAGE]: Server listening to Port 9090")
 	}()
 
 	sigChan := make(chan os.Signal)
