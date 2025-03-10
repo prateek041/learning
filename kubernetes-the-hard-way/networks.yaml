@@ -1,0 +1,6 @@
+networks:
+  user-v2:
+    mode: user-v2
+    gateway: 192.168.104.1
+    netmask: 255.255.255.0
+
