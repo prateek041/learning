@@ -1,0 +1,66 @@
+List of questions I did so far and concepts I learnt.
+
+- [[226.Invert Binary Tree]] (Easy)
+- [[104.Maximum Depth of Binary Tree]] (Easy)
+- [[543 Diameter of Binary Tree]] (Easy)
+- [[110 Balanced Binary Tree]] (Easy)
+- [[100.Same Tree]] (Easy)
+- [[572.Subtree of another Tree]] (Easy)
+- [[235.Lowest Common Ancestor of a Binary Tree]] (Medium)
+- [[102.Binary Tree Level Order Traversal]] (Medium)
+- [[199. Binary Tree Right side View]] (Medium)
+
+## Concepts
+- [[bfs |BFS]]
+- [[DFS]]
+- [[Mutable Default arguments in Python]]
+- [[Binary Tree]]
+- [[Binary Search Tree]]
+- [[Queue vs Stack in Python]]
+
+## TODO List
+- [ ] Binary Trees
+	- [ ] Full Binary Tree
+	- [ ] Complete Binary Tree
+	- [ ] Perfect Binary Tree
+	- [ ] Balanced Binary Tree
+- [ ] Binary Search Tree
+	- [ ] Insert/Delete
+	- [ ] Search
+- [ ] Tree Traversals
+	- [ ] In order Traversal
+	- [ ] Pre-order Traversal
+	- [ ] Post-order Traversal
+	- [ ] Level-order Traversal
+- [ ] Binary Tree Algorithm
+	- [ ] Height/Depth Calculation
+	- [ ] Lowest Common ancestor
+	- [ ] Check Balanced Tree
+	- [ ] Invert/Reverse Binary Tree
+	- [ ] Diameter of a Binary Tree
+	- [ ] Symmetric Tree
+- [ ] Advanced Trees
+	- [ ] AVL Tree
+	- [ ] Red-Black Tree
+	- [ ] Segment Tree
+	- [ ] Fenwick Tree
+	- [ ] Trie
+- [ ] Heaps
+	- [ ] Min Heap
+	- [ ] Max Heap
+	- [ ] Heap Operations
+	- [ ] Heapify
+- [ ] N-ary Tree
+	- [ ] more than two children
+	- [ ] pre-order, post-order, level-order
+- [ ] Tree Problems
+	- [ ] kth smallest/largest element in BST
+	- [ ] Path Sum
+	- [ ] Serialize/Deserialize a Tree
+	- [ ] Count Nodes
+	- [ ] Flatten Binary Tree to Linked List
+- [ ] Graph Representation
+	- [ ] Union Find/Disjoint Set
+	- [ ] Spanning Tree
+	- [ ] Minimum spanning Tree
+- [ ] B Tree and B+ Trees

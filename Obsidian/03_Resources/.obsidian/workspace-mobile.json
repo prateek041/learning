@@ -1,0 +1,145 @@
+{
+  "main": {
+    "id": "e55c2c8747fcf624",
+    "type": "split",
+    "children": [
+      {
+        "id": "95ddc579acbf094e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f614327d9223a06c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "grokking-kubernetes/DNS.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "cef08e3416b3ebae",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "21462d0f64ebb1ea",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical"
+          }
+        }
+      },
+      {
+        "id": "e3855a60db17c5bd",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          }
+        }
+      },
+      {
+        "id": "df2c93950215f584",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true
+          }
+        }
+      },
+      {
+        "id": "9d2b65196f5d2b57",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {}
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "cfaca922aa0511ed",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "d565361553628078",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "grokking-kubernetes/DNS.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          }
+        }
+      },
+      {
+        "id": "52f45525463e42e3",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "grokking-kubernetes/DNS.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          }
+        }
+      },
+      {
+        "id": "36b2cf01ac336f84",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "grokking-kubernetes/DNS.md"
+          }
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "f614327d9223a06c",
+  "lastOpenFiles": [
+    "grokking-kubernetes/DNS in kubernetes.md",
+    "grokking-kubernetes/DNS.md",
+    "grokking-kubernetes/How DNS works.md",
+    "go/context.md",
+    "go/type-assertion.md",
+    "go/recievers-go-methods.md",
+    "go/generics.md",
+    "bazel/What is Bazel.md"
+  ]
+}

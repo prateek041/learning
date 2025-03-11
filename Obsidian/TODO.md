@@ -1,0 +1,7 @@
+- [x] Creat your profile on sessionize
+- [x] get Your passport ready
+- [ ] Driving license
+- [ ] Kubecon India Scholarship and Session
+- [ ] Learn gRPC
+- [ ] How self collecting metrics work in Prometheus
+- [ ] Ask about what is "event cache"

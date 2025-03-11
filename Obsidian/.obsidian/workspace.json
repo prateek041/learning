@@ -1,0 +1,206 @@
+{
+  "main": {
+    "id": "c8d5fdf40e09218c",
+    "type": "split",
+    "children": [
+      {
+        "id": "105a350342d1623a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a804db0745093bee",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01_Projects/data-structures/trees/bfs.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "bfs"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f5cd276ae168d6ec",
+    "type": "split",
+    "children": [
+      {
+        "id": "a7d2eaf78e5c8be7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d47d1be24970f3f8",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "6285d0062e5a598f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "d04cc0461c7e67ba",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "fffb0bbd4a9b823a",
+    "type": "split",
+    "children": [
+      {
+        "id": "eb67d866cd352384",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ab262f68ca1a854d",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "01_Projects/Host to Host Communication.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Host to Host Communication"
+            }
+          },
+          {
+            "id": "69bea48e8161a1d9",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "01_Projects/Host to Host Communication.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Host to Host Communication"
+            }
+          },
+          {
+            "id": "2f9c1bc8a4414844",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "eee8989ab7cca0dd",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "01_Projects/Host to Host Communication.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Host to Host Communication"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false
+    }
+  },
+  "active": "a804db0745093bee",
+  "lastOpenFiles": [
+    "01_Projects/data-structures/trees/Trees.md",
+    "01_Projects/data-structures/trees/questions/226.Invert Binary Tree.md",
+    "01_Projects/data-structures/trees/bfs.md",
+    "03_Resources/ebpf/learning-ebpf-chapter-4.md",
+    "03_Resources/ebpf/learning-ebpf-kprobes.md",
+    "01_Projects/Excalidraw/Egress path 2024-11-07 16.56.09.excalidraw.md",
+    "01_Projects/Excalidraw/Drawing 2024-11-12 20.15.32.excalidraw.md",
+    "01_Projects/go-interpreter/lexer.md",
+    "01_Projects/Excalidraw/Drawing 2024-11-07 20.35.00.excalidraw.md",
+    "01_Projects/Excalidraw/Host to Host 2024-11-04 16.45.36.excalidraw.md",
+    "01_Projects/Excalidraw/Drawing 2024-11-04 16.56.09.excalidraw.md",
+    "01_Projects/Excalidraw/Drawing 2024-11-04 16.43.54.excalidraw.md",
+    "Excalidraw/Drawing 2024-07-15 06.52.21.excalidraw.md",
+    "Excalidraw/Drawing 2024-08-04 21.02.36.excalidraw.md",
+    "01_Projects/Host to Host Communication.md",
+    "versions.md",
+    "01_Projects/data-structures/Data Structure and Algorithms.md",
+    "01_Projects/Excalidraw/Drawing 2024-11-04 16.45.36.excalidraw.md",
+    "01_Projects/Excalidraw",
+    "01_Projects/Untitled.md",
+    "01_Projects/Networks",
+    "01_Projects/data-structures/heaps/concepts/Heap.md",
+    "01_Projects/data-structures/heaps/questions",
+    "01_Projects/data-structures/heaps/concepts",
+    "01_Projects/data-structures/heaps",
+    "03_Resources/ebpf/Chapter 2.md",
+    "03_Resources/ebpf/things-to-look-at.md",
+    "03_Resources/ebpf/chapter-3.md",
+    "03_Resources/ebpf/learning-ebpf-BPF-maps.md",
+    "03_Resources/ebpf/learning-ebpf-helloworld.md",
+    "03_Resources/ebpf/eBPF in Cloud Native.md",
+    "01_Projects/gRPC",
+    "01_Projects/writings/prateek",
+    "Untitled.canvas",
+    "Excalidraw",
+    "01_Projects/data-structures/trees/concepts",
+    "03_Resources/go/singleton"
+  ]
+}

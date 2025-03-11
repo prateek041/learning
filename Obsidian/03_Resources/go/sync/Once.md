@@ -1,0 +1,1 @@
+Once is used to make sure that a certain function is executed exactly once for an instance.

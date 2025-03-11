@@ -1,0 +1,1 @@
+there is a way to use sidecar pattern, but even that is hard to setup, so we use eBPF so that we don't even have to set anything up and we can truly separate the observability from the application business logic.

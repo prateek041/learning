@@ -1,0 +1,17 @@
+There are the following Health metrics in Tetragon
+- [[versions]] (Build info related metrics)
+- [[error metrics]] (tetragon and event handler errors)
+- [[event cache metrics]]
+- [[event metrics]] (health and event metrics)
+- [[map metrics]]
+- [[opcode metrics]]
+- [[policy filter metrics]]
+- process
+- ring buf metrics
+- ring buf queue metrics
+- watcher metrics
+- observer
+- tracing
+- rate limit metrics
+- exporter
+- cgroup metrics
