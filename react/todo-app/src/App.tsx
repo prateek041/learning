@@ -1,4 +1,5 @@
-import ListItems, { Todo } from "./components/listitems";
+import ListItems from "./components/listitems";
+import { Todo } from "./types/types";
 
 const sampleTodos: Todo[] = [
   {
