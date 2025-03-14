@@ -24,3 +24,14 @@ are a linux kernel thing, while `tracers` are a `ftrace` thing.
 The `kernel` code writes the traces into a ring buffer, which is accessible
 through an interface (a file), which is `/sys/kernel/tracing/trace`, when
 read.
+
+> [!IMPORTANT]
+> The file `tracepoint.h` holds the definition of `TRACE_EVENT` which is
+> used to define a trace event. Similarly, the
+> [/trace/events](<https://elixir.bootlin.com/linux/v6.2.2/>> source/include/trace/events)
+> contains the pre-defined kernel trace events.
+
+### Learn about
+
+- [ ] BPF Type Format (BTF) [link](https://docs.kernel.org/bpf/btf.html)
+- [ ] ELF file and its types [ELF files](https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/)
