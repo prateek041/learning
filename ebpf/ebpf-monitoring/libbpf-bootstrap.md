@@ -8,7 +8,7 @@ You need to know the steps needed for things to work.
 for beginner users to get started without unnecessary hassle of setting things
 up.
 
-Keep you BPF logic and implementation as simple as possible so that it is backward
+Keep you `BPF` logic and implementation as simple as possible so that it is backward
 compatible and not too much reliant on latest features.
 
 ## Understanding the Makefile
@@ -40,7 +40,7 @@ CLANG_BPF_SYS_INCLUDES ?= $(shell $(CLANG) -v -E - </dev/null 2>&1 | sed -n '/<.
 ```
 
 This line is designed to find the default system include directories that Clang
-uses when it's targeting the BPF architecture (the architecture for eBPF programs).
+uses when it's targeting the `BPF` architecture (the architecture for `eBPF` programs).
 Here's a more detailed breakdown:
 
 1. `CLANG_BPF_SYS_INCLUDES ?=`: This defines a Makefile variable named `CLANG_BPF_SYS_INCLUDES`.
@@ -70,11 +70,11 @@ parentheses in a shell and returns its output.
       function.
 
 4. `sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }'`:
-This part pipes the output of the Clang command to the sed command for further
-processing. sed is a stream editor used for filtering and transforming text.
-    - `n`: This option tells sed not to print every line by default. We will
+This part pipes the output of the Clang command to the `sed` command for further
+processing. `sed` is a stream editor used for filtering and transforming text.
+    - `n`: This option tells `sed` not to print every line by default. We will
       explicitly tell it which lines to print.
-    - `/<...> search starts here:/,/End of search list./{ ... }`: This is a sed
+    - `/<...> search starts here:/,/End of search list./{ ... }`: This is a `sed`
       command that operates on the lines between the pattern <...> search starts
       here: and the pattern End of search list.. These are the lines in Clang's
       verbose output that list the system include directories.
@@ -98,17 +98,17 @@ processing. sed is a stream editor used for filtering and transforming text.
 
 In essence, this whole line executes Clang in a verbose preprocessor mode,
 captures its output, filters out the lines that list the system include
-directories, and then formats these directories as -idirafter flags.
+directories, and then formats these directories as `-idirafter` flags.
 
-The use of -idirafter is important because it ensures that the include paths
-specified directly in the INCLUDES variable (like those in libbpf/include/uapi)
+The use of `-idirafter` is important because it ensures that the include paths
+specified directly in the INCLUDES variable (like those in `libbpf/include/uapi`)
 are searched by the compiler before the default system include paths found by
 this command. This is a common strategy when building software that needs to
 use its own versions of headers or headers specific to a target environment
-(like the BPF architecture) to avoid potential conflicts with system-wide headers
+(like the `BPF` architecture) to avoid potential conflicts with system-wide headers
 that might be different or incompatible . This is particularly relevant when
-cross-compiling for eBPF, where the system you are building on might have
-different kernel headers than the target kernel where the eBPF program will run.
+cross-compiling for `eBPF`, where the system you are building on might have
+different kernel headers than the target kernel where the `eBPF` program will run.
 
 ## Linker
 
