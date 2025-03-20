@@ -1,5 +1,7 @@
 ---
-title: "Everything about ELF"
+title: "ELF (Executable and Linkable Format" and eBPF
+description: "Understanding working of ELF files in-depth to properly understand some core functionalities of how eBPF programs are compiled and loaded into the kernel"
+date: March 21, 2025
 ---
 
 When working with **eBPF(Extended Berkeley Packet Filter)**, understanding
@@ -9,21 +11,21 @@ you an edge.
 
 There are a few things when it comes to working with eBPF:
 
-- **Custom Sections in eBPF**: eBPF programs use ELF files with special
+- **Custom Sections in eBPF**: `eBPF` programs use ELF files with special
 sections to organise their parts.
-  - `prog`: Hold the eBPF bytecode (the instructions that run in the kernel).
-  In C, you tag this with `SEC("prog")` macro provided by `libbpf`, to tell
-  the compiler where your program goes.
-  - `.maps`: Defines eBPF maps, which are like shared storage spaces between
+  - `prog`: Hold the `eBPF` bytecode (the instructions that run in the kernel).
+  In C, you tag this with `SEC("kprobe/my_func")` macro provided by `libbpf`,
+  to tell the compiler where your program goes.
+  - `.maps`: Defines `eBPF` maps, which are like shared storage spaces between
   the kernel and the user-space code.
   - Tools like `bpftool` or `libbpf` read these sections to load the program
   and set up maps correctly.
 
-- **Specifying Tracepoints and System Calls with `SEC`**: In eBPF, the `SEC`
+- **Specifying `Tracepoints` and System Calls with `SEC`**: In `eBPF`, the `SEC`
 macro isn't just for generic programs, it lets you hook into specific kernel
 events like `tracepoints` or `system calls`. For example:
-  - `SEC("tp/syscalls/sys_enter_write")`: This attaches your eBPF program to
-  the `sys_enter_write` tracepoint. which triggers every time the `write` system
+  - `SEC("tp/syscalls/sys_enter_write")`: This attaches your `eBPF` program to
+  the `sys_enter_write` `tracepoint`. which triggers every time the `write` system
   call is invoked.
 
 As you can see, sections in ELF are a pretty big deal already when it comes to
