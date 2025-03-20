@@ -120,6 +120,163 @@ of the code. Linker combines them into a single executable program.
 These are the options that are passed to the `linker` program after the compilation
 stage.
 
+## Minimal App
+
+## No parent section
+
+### Finding all the available events
+
+```bash
+find /sys/kernel/tracing/events -type d
+```
+
+## Important Commands
+
+- `file`: used to get some information about the binary/object file.
+- `readelf`: used to read more in-depth information about the binary/object file.
+
+---
+
+## Little Endian and Big Endian systems
+
+### The hardware limitations
+
+In most computer systems, RAM (Random Access Memory) is designed to store and
+retrieve data in units called *bytes*. A byte is 8 *bits* and it's the smallest
+*addressable* unit in the memory. This means when the CPU talk to the RAM.
+It cannot grab anything smaller than 1 byte at a time (like 2/3/4... `bits`), it
+always has to work with at least 1 byte at a time.
+
+So, if you store anything smaller than 1 byte in your memory, it still takes up
+the entire space. For example:
+
+- A single bit for `true` might be stored as `0x01` (binary: 00000001), where only
+1 bit is used and other 7 are zeros.
+- A 4 bit number like 5 (binary: 0101) becomes `0x05` (binary: 00000101), with
+4 bits unused.
+
+### The number system
+
+There are multiple numbers systems to represent a number in a computer. Some of
+them are:
+
+- Binary (base 2)
+- Hexadecimal (base 16)
+- Decimal (base 10)
+
+Let's try to understand how they interact with each other.
+
+#### Hexadecimal and Binary
+
+To represent a `hex` number in `binary`, we need 4 bits. Therefore the numbers
+mapping would look like this:
+
+- 0 -> 0000
+- 1 -> 0001
+- 2 -> 0010
+- 3 -> 0011
+- 4 -> 0100
+- 5 -> 0101
+- 6 -> 0110
+- 7 -> 0111
+- 8 -> 1000
+- 9 -> 1001
+- A -> 1010
+- B -> 1011
+- C -> 1100
+- D -> 1101
+- E -> 1110
+- F -> 1111
+
+Now, since a byte is 8 bits, and each hex digit is 4 bits, it takes two hex digits
+to represent one byte. For example:
+
+##### Multiple Byte integers
+
+- `0x12` (Hexadecimal) = `0001 0010` (Binary) = 1 byte.
+
+- `0x12345678` (Hexadecimal) = `0001 0010 0011 0100 0101 0110 0111 1000` (Binary)
+= 32 bits = 4 bytes
+  - Byte 1: `0x12`
+  - Byte 2: `0x34`
+  - Byte 3: `0x56`
+  - Byte 4: `0x78`
+
+---
+
+## ELF Files
+
+ELF is the abbreviation for Executable and Linkable Format and defines the structure
+for binaries, libraries, and core files. ELF files are typically the output of a
+compiler or linker and are a binary format.
+
+### From source to process
+
+So whatever operating system we run, it needs to translate common functions to
+the language of the CPU, also known as machine code. A function could be something
+basic like opening a file on disk or showing something on the screen. Instead of
+talking directly to the CPU, we use a programming language, using internal functions.
+A compiler then translates these functions into object code. This object code is
+then linked into a full program, by using a linker tool. The result is a binary
+file, which then can be executed on that specific platform and CPU type.
+
+### Structure of an ELF file
+
+There are two major sections in an ELF file
+
+- ELF Headers
+- File data
+
+#### ELF Header
+
+If you use the command `readelf -a <filename>` you will get to see something like
+this.
+
+```bash
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          15224 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           64 (bytes)
+  Number of section headers:         23
+  Section header string table index: 22
+```
+
+Let's understand each individual parts.
+
+- **Magic** : This ELF header magic provides information about the file. The first
+four hexadecimal parts define that this is an ELF file (45=E,4c=L,46=F),
+prefixed with the 7f value.
+- **Class**: This defines the architecture of the file i.e. whether it is
+**32 bit (=01)** or **64 bit (=02)**. You can see in the Magic section, **02**
+which `readelf` command translates to `ELF64`.
+- **Data**: The next section tells whether the system follows `big endian` or
+`little endian` architecture. Where `01` is for little endian.
+
+## Kernel Events and their types
+
+- `syscalls/` → System call events (sys_enter_*, sys_exit_*).
+- `sched/` → Scheduler events (sched_switch, sched_wakeup).
+- `irq/` → Interrupt events (irq_handler_entry, irq_handler_exit).
+- `workqueue/` → Workqueue events (workqueue_execute_start, workqueue_execute_end).
+- `net/` → Networking events (net_dev_xmit, netif_receive_skb).
+- `block/` → Block I/O events (block_rq_issue, block_rq_complete).
+- `kmem/` → Memory allocation events (kmalloc, kfree).
+- `sound/` → Sound-related events (snd_soc_jack_notify, etc.).
+
 ## Things to understand
 
 - [ ] CO-RE
