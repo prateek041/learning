@@ -202,6 +202,39 @@ to represent one byte. For example:
   - Byte 3: `0x56`
   - Byte 4: `0x78`
 
+When computer stores numbers bigger than a single byte (8 bits), it needs to break
+them down into smaller pieces (bytes) and decide how to arrange bytes in memory.
+`Endianess` is the rule that decides the order of those bytes.
+
+There are two systems for that: **little endian** and **big endian**
+
+1.**Big Endian: "Big end First"**
+
+In a big endian system, the most significant byte (the big part) gets stored at the
+lowest memory address, just like how humans read numbers (left to right). Example:
+
+`x12345678` (a 4 byte integer in hex) can be stored in the memory like:
+
+- `0x12` is the most significant byte (MSB).
+- `0x78` is the least significant byte (LSB).
+
+In memory, a big endian system stores it like this:
+
+- Address 0: `0x12` (MSB)
+- Address 1: `0x34`
+- Address 2: `0x56`
+- Address 3: `0x78` (LSB)
+
+2.**Little Endian: "Little End First"**
+
+A little endian system is just the opposite of a big endian system. It stores the
+`LSB` in the lowest memory address. So the above example becomes:
+
+- Address 3: `0x12` (MSB)
+- Address 2: `0x34`
+- Address 1: `0x56`
+- Address 0: `0x78` (LSB)
+
 ---
 
 ## ELF Files
