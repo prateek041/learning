@@ -2,128 +2,208 @@
 title: "Everything about ELF"
 ---
 
+When working with **eBPF(Extended Berkeley Packet Filter)**, understanding
+ELF files is a game changer. In fact, when working with any binary file
+in a UNIX based system, understanding inner workings of **ELF** can give
+you an edge.
+
+There are a few things when it comes to working with eBPF:
+
+- **Custom Sections in eBPF**: eBPF programs use ELF files with special
+sections to organise their parts.
+  - `prog`: Hold the eBPF bytecode (the instructions that run in the kernel).
+  In C, you tag this with `SEC("prog")` macro provided by `libbpf`, to tell
+  the compiler where your program goes.
+  - `.maps`: Defines eBPF maps, which are like shared storage spaces between
+  the kernel and the user-space code.
+  - Tools like `bpftool` or `libbpf` read these sections to load the program
+  and set up maps correctly.
+
+- **Specifying Tracepoints and System Calls with `SEC`**: In eBPF, the `SEC`
+macro isn't just for generic programs, it lets you hook into specific kernel
+events like `tracepoints` or `system calls`. For example:
+  - `SEC("tp/syscalls/sys_enter_write")`: This attaches your eBPF program to
+  the `sys_enter_write` tracepoint. which triggers every time the `write` system
+  call is invoked.
+
+As you can see, sections in ELF are a pretty big deal already when it comes to
+working with `eBPF`. So, If you have questions like "Why do we need sections",
+"what are ELF files" or "Why are we keeping" in your mind, this article dives
+deep into answering those questions. In fact, it is the only article you need
+to wrap your head around these concepts.
+
 ## What is ELF
 
-// Write about ELF Here.
+The `Executable and Linkable Format(ELF)` is a standard file format used in Unix
+like operating systems, such as Linux, to store
+
+- **executables** (programs you can run)
+- **object**  files (compiled code)
+- **shared files** (reusable code shared by programs)
+
+We are talking about times when the hardware was not so readily available as it
+it today, you could not load the entire program in memory all at once to compile
+and execute it. You had to compile them separately and link them together while
+actually executing.
+
+Think of an ELF program file as a neatly organized box that holds everything a
+program needs i.e. code, data and the instructions for how to put it all together.
+
+Imagine you’re baking a cake from a recipe. The ELF file is like a cookbook: it
+has the ingredients (data), the steps (code), and notes on how to assemble it
+(metadata). This structure helps the computer turn your code into a running
+program, whether it’s a simple "Hello, World!" or a complex application.
 
 ## ELF Sections
 
 Sections in ELF file are like labeled containers that organise different types
-of data in a program.
+of data in a program. Each section has a specific job, making it easier for tools
+like compilers, linkers, and debuggers to find and use what they need.
 
-Some common sections
+Here are some common sections:
 
-- `.text`: The machine code (instructions) your program executes.
-- `.data`: Initialised global or static variables (e.g. `int x = 10;`).
-- `.bss`: Uninitialised global or static variables (`int y;`).
-- `.rodata`: Read-only data.
+- `.text`: The machine code (instructions) your program executes. For example,
+this is where the steps to print "Hello world!" live.
+- `.data`: Initialised global or static variables. Example: `int x = 10;` goes
+here because it has a starting value.
+- `.bss`: Uninitialised global or static variables. Example: `int y;` ends up
+here and gets set to zero (default null) when the program starts.
+- `.rodata`: Read-only data, like string literals. Example: `"Hello World!"` is
+stored here since it doesn't change.
 - `.symtab`: A symbol table listing functions and variables with their addresses.
-- `.rela.text`: Relocation entries for the `.text` section.
-- `.strtab`: A string table with names of symbols.
+Think of it as a directory for finding `main` and `prinf`.
+- `.rela.text`: Relocation entries for the `.text` section. These are like
+"fix me later" notes for addresses the compiler doesn't know yet.
+- `.strtab`: A string table with names of symbols, such as `"main"` or `"printf`,
+so tools can read them as text.
 
 ## Why do we need them
 
-- **Organization**: Sections group related data, so tools know where to find
-specific pieces (e.g., code vs. variables).
-- **Efficiency**: Each section has attributes (e.g., executable, writable),
-letting the operating system load them into memory with the right permissions.
-- **Flexibility**: During linking, sections from multiple files can be combined
-or rearranged to build the final program.
+Sections aren't just random, they're essential for making programs work
+smoothly:
+
+- **Organization**: Sections group related data (e.g., code in `.text` or
+variables in `.data`), so tools know where to look.
+- **Efficiency**: Each section has attributes, like "executable" for `.text`
+or "writable" for `.data`. This tells the operating system how to load them into
+memory with the right permissions.
+- **Flexibility**: When linking multiple files, sections can be merged or
+rearranged. For example, `.text` sections from different `.o` files combine
+into one big `.text` in the final program.
+
+**Example**: When you use a debugger like `gdb`, it reads `.symtab` to show you
+function names and line numbers, linking the machine code back to your original
+code.
 
 ## Different types of ELF files
 
-The ELF header’s type field tells us what the file is for. Each type serves
-a unique purpose in the process of creating and running programs. Here are
-the common types with examples:
+The ELF header’s **type field** tells us what the file is for. Each type plays
+a unique role in turning code into a running program. Here are the main types
+with examples:
 
-- **REL** (Relocatable File, value 1):
-  - What: An object file (.o) from the compiler, not yet linked.
-  - Use: Contains code and data with relocations, ready to be linked into an executable.
-  - Example: `gcc -c myfile.c -o myfile.o` creates a `REL` file.
-- **EXEC** (Executable File, value 2):
-  - What: A fully linked program you can run.
-  - Use: Loaded directly into memory for execution.
-  - Example: `gcc myfile.c -o myprogram` creates an `EXEC` file.
-- **DYN** (Shared Object File, value 3):
-  - What: A shared library (.so) for dynamic linking.
-  - Use: Provides reusable code loaded at runtime (e.g., by multiple programs).
-  - Example: `libc.so` (the C standard library) is a `DYN` file.
+- **REL (Relocatable File, value 1)**:
+  - What: An object file (`.o`) from the compiler, not ready to run yet.
+  - Use: Contains code and data with relocations "to be filled", waiting to be
+  linked.
+  - Example: `gcc -c myfile.c -o myfile.o` creates a `REL` file with your compiled
+  code.
+- **EXEC (Executable File, value 2)**:
+  - What: A fully linked program you can run directly.
+  - Use: Ready to be loaded into the memory and executed.
+  - Example: `gcc myfile.c -o myprogram` creates an `EXEC` file you can run with
+  `./myprogram`.
+- **DYN (Shared Object File, value 3)**:
+  - What: A shared library (`.so`) for dynamic linking.
+  - Use: Provides reusable code that programs load at runtime. Multiple
+  programs can share it, saving space..
+  - Example: `libc.so` (the C standard library) is a `DYN` file used by many
+  programs for functions like `printf`.
 - **CORE** (value 4):
   - What: A core dump file from a crashed program.
-  - Use: Helps debug what went wrong by showing the program’s state at the crash.
-  - Example: If `myprogram` crashes, the kernel might create core or `core.pid`.
+  - Use: Captures the program’s state (memory, variables) when it crashes,
+  helping you debug.
+  - Example: If `myprogram` crashes, the kernel might save a `core` file for analysis.
 
 ### Why Different Types?
 
-Each type matches a step or role in the process—compiling (REL), running (EXEC),
-sharing code (DYN), or debugging crashes (CORE). Tools like readelf use this
-field to know how to handle the file.
+Relocations are placeholders in an ELF file that mark where addresses need
+to be filled in later. They’re crucial because the compiler doesn’t always
+know where things (like external functions or variables) will end up in memory
+when it first compiles your code.
 
-## Why do we need relocation
+#### How They Work
 
-Relocations make it possible to build programs from multiple pieces, even when
-their addresses aren’t known until later.
+Say your program calls `printf` from the C library (`libc`). In the object
+file (`.o`):
 
-Relocations are placeholders in an ELF file that mark spots where addresses need
-to be filled in later.
+- The `.text` section has a placeholder for `printf`’s address (e.g., a temporary
+`0x0`).
+- The `.rela.text` section adds a note: "At this spot, insert `printf`’s real address."
+- During linking:
+  - Static linking: The linker fills in `printf`’s address from a library included
+  in the executable.
+  - Dynamic linking: The address stays unresolved until runtime, when the dynamic
+  linker (`ld.so`) finds `printf` in `libc.so`.
 
-In an object file (.o), if your code calls an external function like `fprintf`
-(from `libc`), the compiler can’t set its address yet. Instead, it puts a
-temporary value in the `.text` section and adds a relocation entry (e.g., in
-`.rela.text`) saying:
+**Example**: If you write `fprintf(stderr, "Error");`, the compiler leaves a
+relocation entry for `fprintf`. The linker (or dynamic linker) later connects it
+to the real `fprintf` in `libc`.
 
-> At this spot in the code, insert the address of `fprintf`.
-> It includes details like the symbol name and how to calculate the address.
+Relocations let you build programs from multiple files or libraries, even when
+their final locations aren’t known yet.
 
 ### The Process: From Compilation to Execution
 
 Here’s how a C program goes from source code to running in memory, focusing
-on what happens after compilation:
+on what happens after compilation, this will help you understand the overall
+importance of ELF files:
 
 - **Step 1: Compilation**
+  - **What Happens**: When you compile a `.c` file with `gcc -c myfile.c -o myfile.o`).
+  You get a `.o` file, which is an ELF REL (relocatable) file.
 
-What Happens: When you compile a `.c` file (e.g., `gcc -c myfile.c -o myfile.o`)
-, you get a `.o` file, which is an ELF REL (relocatable) file.
-
-**What’s Inside**: Sections like `.text`  (code), `.data` (variables), `.bss`, and
-`.rela.text` (relocations). No segments yet, since it’s not executable.
-
-**Purpose**: This file has your code but with unresolved references (e.g., to `printf`).
+  - **What’s Inside**: Sections like `.text` (code), `.data` (variables), `.bss`,
+  and `.rela.text` (relocations). No segments yet, since it’s not executable.
+  - **Purpose**: This file has your code but with unresolved references (e.g.,
+  to `printf`) unresolved.
 
 - **Step 2: Linking**
 
-**What Happens**: The linker (`ld`) combines one or more `.o` files and libraries
-into an executable (e.g., `gcc myfile.o -o myprogram`).
+- **What Happens**: The linker (`ld`) combines one or more `.o` files and libraries
+into an executable with `gcc myfile.o -o myprogram`).
 
-**Process**: Combines sections (e.g., merges all `.text` sections into one).
-**Resolves relocations**:
+- **Process**:
+  - Combines sections (e.g., merges all `.text` sections into one).
+  - **Resolves relocations**:
     - Static linking: Fills in all addresses (e.g., `printf`’s location in the executable).
     - Dynamic linking: Leaves some for runtime (e.g., `printf` from `libc.so`).
-Adds segments (program headers) for loading into memory.
+  - Adds segments (program headers) to tell the program how to load the file into
+  the memory.
 
 **Output**: An ELF EXEC file (`myprogram`) with sections and segments.
 
 - **Step 3: Loading and Execution**
 
-**What Happens** : When you run `./myprogram`, the OS loads it into memory.
+  - **What Happens** : When you run `./myprogram`, the OS loads it into memory.
 
-- **Loading**: The OS reads the ELF file’s segments (program headers).
-  - For each LOAD segment:
-    - Allocates memory with the right permissions
-    (e.g., executable for `.text`).
-    - Copies the segment’s data from the file.
-    - Zeroes out `.bss` (since it’s uninitialized and takes no file space).
-  - If dynamically linked:
-    - The dynamic linker (`ld.so`) loads libraries (e.g., `libc.so`).
-    - Resolves remaining relocations, updating addresses in memory.
-- **Execution**: The OS jumps to the program’s entry point (e.g., `_start`),
-which calls main.
+  - **Loading**:
+    - The OS reads the ELF file’s segments ( from program headers).
+    - For each `LOAD` segment:
+      - Allocates memory with the right permissions (e.g., executable for
+      `.text`).
+      - Copies data from the file.
+      - Zeroes out `.bss` (since it’s uninitialized and takes no file space).
+    - If dynamically linked:
+      - The dynamic linker (`ld.so`) loads libraries (e.g., `libc.so`).
+      - Resolves remaining relocations, updating addresses in memory.
+  - **Execution**: The OS jumps to the program’s entry point (e.g., `_start`),
+which calls `main`.
 
 ### Runtime Use Case for Sections
 
 Even after loading, sections can be useful:
 
-A debugger like `gdb` uses `.symtab` and `.debug_*` sections to show you
+- A debugger like `gdb` uses `.symtab` and `.debug_*` sections to show you
 variable values and source code lines while the program runs.
 
 ## An ELF File and Inspecting it
@@ -140,12 +220,14 @@ int main(){
 
 We will compile this in two stages:
 
-- `gcc -c main.c -o main.o`: Creates a REL (relocatable) ELF file.
-- `gcc main.o -o main`: Links it into an EXEC (executable) ELF file.
+- `gcc -c main.c -o main.o`: Creates a **REL (relocatable)** ELF file.
+- `gcc main.o -o main`: Links it into an **EXEC (executable)** ELF file.
 
 ### Inspecting REL File
 
 Running `readelf -a main.o` reveals a few things:
+
+#### ELF Headers
 
 ```bash
 ELF Header:
@@ -171,12 +253,15 @@ ELF Header:
 ```
 
 - **ELF Header**:
-  - Magic: `7f 45 4c 46 ...` (identifies it as an ELF file).
+  - Magic: `7f 45 4c 46 ...` (confirms it as an ELF file `45`:`E`, `4c`: `L`,
+  `46`: `F`).
   - Type: `REL` (relocatable, not ready to run yet).
-  - Machine: `x86_64` (or your architecture).
+  - Machine: `x86_64` (or your system's architecture).
   - Entry Point: None (not applicable for REL files).
   - Section Header Offset: Points to where sections are listed.
   - Program Header Offset: 0 (no segments yet).
+
+#### Section Headers
 
   ```txt
   Section Headers:
@@ -212,8 +297,8 @@ ELF Header:
        0000000000000074  0000000000000000           0     0     1
   ```
 
-- `.text`: Contains the compiled machine code for main.
-  - Example: call `0x0` (placeholder for `printf`).
+- `.text`: The machine code for `main`, including a call to `printf` (placeholder
+address).
 - `.rela.text`: Relocation entries for unresolved references.
   - Example: “At offset 0x5, fix the call to `printf`.”
 - `.rodata`: Read-only data, like the string `"Hello, World!\n"`.
@@ -225,6 +310,8 @@ ELF Header:
 - `.strtab`: String table for symbol names.
 
 ### Inspecting EXEC File
+
+#### ELF Headers
 
 ```txt
 ELF Header:
@@ -251,6 +338,8 @@ ELF Header:
 
 Headers are similar, except there is a starting point along with file type
 being executable.
+
+#### Section Headers
 
 ```txt
 Section Headers:
@@ -320,8 +409,8 @@ Section Headers:
 
 - **Sections**
 
-  - `.text`: Now includes main’s code plus startup code from `libc`.
-  - `.rodata`: Still has "Hello, World!\n".
+  - `.text`: Now includes `main` plus startup code from `libc`.
+  - `.rodata`: Still has `"Hello, World!\n"`.
   - `.plt`: Procedure Linkage Table for dynamic calls (e.g., to `printf`).
   - `.got`: Global Offset Table for dynamic addresses.
   - `.data`, `.bss`: As before, plus any from linked libraries.
@@ -329,3 +418,6 @@ Section Headers:
   - `.symtab`: Symbols, though often stripped in release builds.
 
   To read in depth description of each section, read [this](https://www.muppetlabs.com/~breadbox/software/ELF.txt).
+
+In short, ELF is the backbone of how `eBPF` programs are packaged and loaded.
+Understanding it makes you better at writing, debugging, and deploying `eBPF` code.
