@@ -297,7 +297,44 @@ prefixed with the 7f value.
 **32 bit (=01)** or **64 bit (=02)**. You can see in the Magic section, **02**
 which `readelf` command translates to `ELF64`.
 - **Data**: The next section tells whether the system follows `big endian` or
-`little endian` architecture. Where `01` is for little endian.
+`little endian` number representation system. Where `01` is for little endian
+and `02` is for big endian. Since we are on a `AMD64` system, it follows
+little endian.
+- **Version** : There is just one version type, nothing interesting here as of
+now.
+- **OS/ABI**: Defines what ABI is used for the system. Represented through `00`.
+- **Type**: Defines the purpose of the file. Below are a few common file types:
+  - CORE (value: 4).
+  - DYN (Shared object file), for libraries (value: 3).
+  - EXEC (Executable file), for binaries (value: 2).
+  - REL (Relocatable file), before linked into an executable (value: 1).
+
+#### File Data
+
+Besides ELF header, ELF file consist of three parts.
+
+- **Program Headers**  or **Segments**
+- **Section Headers** or **Sections**
+- **Data**
+
+ELF has two complementary "views". One is used for the linker to allow execution
+(segments). The other one for categorizing instructions and data (sections).
+
+##### Program Headers
+
+Program Headers are absolutely required for Program executions. The file consists
+of zero or more segments that describe how to create process/memory image for runtime
+execution. Kernel maps these segments into virtual memory addresses. In simple words,
+it converts pre-defined instructions into a memory image.
+
+##### ELF Sections
+
+**Section Headers**
+This view is used for linking and relocation and section headers are used to define
+all the sections in the file.
+
+For an executable file there are four main sections, `.data`, `.text`, `.rodata`
+and `.bss`.
 
 ## Kernel Events and their types
 
