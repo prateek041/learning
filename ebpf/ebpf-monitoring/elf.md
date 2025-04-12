@@ -1,5 +1,5 @@
 ---
-title: "ELF (Executable and Linkable Format" and eBPF
+title: "ELF and eBPF"
 description: "Understanding working of ELF files in-depth to properly understand some core functionalities of how eBPF programs are compiled and loaded into the kernel"
 date: March 21, 2025
 ---
@@ -12,21 +12,22 @@ you an edge.
 There are a few things when it comes to working with eBPF:
 
 - **Custom Sections in eBPF**: `eBPF` programs use ELF files with special
-sections to organise their parts.
+  sections to organise their parts.
+
   - `prog`: Hold the `eBPF` bytecode (the instructions that run in the kernel).
-  In C, you tag this with `SEC("kprobe/my_func")` macro provided by `libbpf`,
-  to tell the compiler where your program goes.
+    In C, you tag this with `SEC("kprobe/my_func")` macro provided by `libbpf`,
+    to tell the compiler where your program goes.
   - `.maps`: Defines `eBPF` maps, which are like shared storage spaces between
-  the kernel and the user-space code.
+    the kernel and the user-space code.
   - Tools like `bpftool` or `libbpf` read these sections to load the program
-  and set up maps correctly.
+    and set up maps correctly.
 
 - **Specifying `Tracepoints` and System Calls with `SEC`**: In `eBPF`, the `SEC`
-macro isn't just for generic programs, it lets you hook into specific kernel
-events like `tracepoints` or `system calls`. For example:
+  macro isn't just for generic programs, it lets you hook into specific kernel
+  events like `tracepoints` or `system calls`. For example:
   - `SEC("tp/syscalls/sys_enter_write")`: This attaches your `eBPF` program to
-  the `sys_enter_write` `tracepoint`. which triggers every time the `write` system
-  call is invoked.
+    the `sys_enter_write` `tracepoint`. which triggers every time the `write` system
+    call is invoked.
 
 As you can see, sections in ELF are a pretty big deal already when it comes to
 working with `eBPF`. So, If you have questions like "Why do we need sections",
@@ -40,7 +41,7 @@ The `Executable and Linkable Format(ELF)` is a standard file format used in Unix
 like operating systems, such as Linux, to store
 
 - **executables** (programs you can run)
-- **object**  files (compiled code)
+- **object** files (compiled code)
 - **shared files** (reusable code shared by programs)
 
 We are talking about times when the hardware was not so readily available as it
@@ -65,19 +66,19 @@ like compilers, linkers, and debuggers to find and use what they need.
 Here are some common sections:
 
 - `.text`: The machine code (instructions) your program executes. For example,
-this is where the steps to print "Hello world!" live.
+  this is where the steps to print "Hello world!" live.
 - `.data`: Initialised global or static variables. Example: `int x = 10;` goes
-here because it has a starting value.
+  here because it has a starting value.
 - `.bss`: Uninitialised global or static variables. Example: `int y;` ends up
-here and gets set to zero (default null) when the program starts.
+  here and gets set to zero (default null) when the program starts.
 - `.rodata`: Read-only data, like string literals. Example: `"Hello World!"` is
-stored here since it doesn't change.
+  stored here since it doesn't change.
 - `.symtab`: A symbol table listing functions and variables with their addresses.
-Think of it as a directory for finding `main` and `prinf`.
+  Think of it as a directory for finding `main` and `prinf`.
 - `.rela.text`: Relocation entries for the `.text` section. These are like
-"fix me later" notes for addresses the compiler doesn't know yet.
+  "fix me later" notes for addresses the compiler doesn't know yet.
 - `.strtab`: A string table with names of symbols, such as `"main"` or `"printf`,
-so tools can read them as text.
+  so tools can read them as text.
 
 ## Why do we need them
 
@@ -85,13 +86,13 @@ Sections aren't just random, they're essential for making programs work
 smoothly:
 
 - **Organization**: Sections group related data (e.g., code in `.text` or
-variables in `.data`), so tools know where to look.
+  variables in `.data`), so tools know where to look.
 - **Efficiency**: Each section has attributes, like "executable" for `.text`
-or "writable" for `.data`. This tells the operating system how to load them into
-memory with the right permissions.
+  or "writable" for `.data`. This tells the operating system how to load them into
+  memory with the right permissions.
 - **Flexibility**: When linking multiple files, sections can be merged or
-rearranged. For example, `.text` sections from different `.o` files combine
-into one big `.text` in the final program.
+  rearranged. For example, `.text` sections from different `.o` files combine
+  into one big `.text` in the final program.
 
 **Example**: When you use a debugger like `gdb`, it reads `.symtab` to show you
 function names and line numbers, linking the machine code back to your original
@@ -106,24 +107,24 @@ with examples:
 - **REL (Relocatable File, value 1)**:
   - What: An object file (`.o`) from the compiler, not ready to run yet.
   - Use: Contains code and data with relocations "to be filled", waiting to be
-  linked.
+    linked.
   - Example: `gcc -c myfile.c -o myfile.o` creates a `REL` file with your compiled
-  code.
+    code.
 - **EXEC (Executable File, value 2)**:
   - What: A fully linked program you can run directly.
   - Use: Ready to be loaded into the memory and executed.
   - Example: `gcc myfile.c -o myprogram` creates an `EXEC` file you can run with
-  `./myprogram`.
+    `./myprogram`.
 - **DYN (Shared Object File, value 3)**:
   - What: A shared library (`.so`) for dynamic linking.
   - Use: Provides reusable code that programs load at runtime. Multiple
-  programs can share it, saving space..
+    programs can share it, saving space..
   - Example: `libc.so` (the C standard library) is a `DYN` file used by many
-  programs for functions like `printf`.
+    programs for functions like `printf`.
 - **CORE** (value 4):
   - What: A core dump file from a crashed program.
   - Use: Captures the program’s state (memory, variables) when it crashes,
-  helping you debug.
+    helping you debug.
   - Example: If `myprogram` crashes, the kernel might save a `core` file for analysis.
 
 ### Why Different Types?
@@ -139,13 +140,13 @@ Say your program calls `printf` from the C library (`libc`). In the object
 file (`.o`):
 
 - The `.text` section has a placeholder for `printf`’s address (e.g., a temporary
-`0x0`).
+  `0x0`).
 - The `.rela.text` section adds a note: "At this spot, insert `printf`’s real address."
 - During linking:
   - Static linking: The linker fills in `printf`’s address from a library included
-  in the executable.
+    in the executable.
   - Dynamic linking: The address stays unresolved until runtime, when the dynamic
-  linker (`ld.so`) finds `printf` in `libc.so`.
+    linker (`ld.so`) finds `printf` in `libc.so`.
 
 **Example**: If you write `fprintf(stderr, "Error");`, the compiler leaves a
 relocation entry for `fprintf`. The linker (or dynamic linker) later connects it
@@ -161,18 +162,19 @@ on what happens after compilation, this will help you understand the overall
 importance of ELF files:
 
 - **Step 1: Compilation**
+
   - **What Happens**: When you compile a `.c` file with `gcc -c myfile.c -o myfile.o`).
-  You get a `.o` file, which is an ELF REL (relocatable) file.
+    You get a `.o` file, which is an ELF REL (relocatable) file.
 
   - **What’s Inside**: Sections like `.text` (code), `.data` (variables), `.bss`,
-  and `.rela.text` (relocations). No segments yet, since it’s not executable.
+    and `.rela.text` (relocations). No segments yet, since it’s not executable.
   - **Purpose**: This file has your code but with unresolved references (e.g.,
-  to `printf`) unresolved.
+    to `printf`) unresolved.
 
 - **Step 2: Linking**
 
 - **What Happens**: The linker (`ld`) combines one or more `.o` files and libraries
-into an executable with `gcc myfile.o -o myprogram`).
+  into an executable with `gcc myfile.o -o myprogram`).
 
 - **Process**:
   - Combines sections (e.g., merges all `.text` sections into one).
@@ -180,7 +182,7 @@ into an executable with `gcc myfile.o -o myprogram`).
     - Static linking: Fills in all addresses (e.g., `printf`’s location in the executable).
     - Dynamic linking: Leaves some for runtime (e.g., `printf` from `libc.so`).
   - Adds segments (program headers) to tell the program how to load the file into
-  the memory.
+    the memory.
 
 **Output**: An ELF EXEC file (`myprogram`) with sections and segments.
 
@@ -192,21 +194,21 @@ into an executable with `gcc myfile.o -o myprogram`).
     - The OS reads the ELF file’s segments ( from program headers).
     - For each `LOAD` segment:
       - Allocates memory with the right permissions (e.g., executable for
-      `.text`).
+        `.text`).
       - Copies data from the file.
       - Zeroes out `.bss` (since it’s uninitialized and takes no file space).
     - If dynamically linked:
       - The dynamic linker (`ld.so`) loads libraries (e.g., `libc.so`).
       - Resolves remaining relocations, updating addresses in memory.
   - **Execution**: The OS jumps to the program’s entry point (e.g., `_start`),
-which calls `main`.
+    which calls `main`.
 
 ### Runtime Use Case for Sections
 
 Even after loading, sections can be useful:
 
 - A debugger like `gdb` uses `.symtab` and `.debug_*` sections to show you
-variable values and source code lines while the program runs.
+  variable values and source code lines while the program runs.
 
 ## An ELF File and Inspecting it
 
@@ -256,7 +258,7 @@ ELF Header:
 
 - **ELF Header**:
   - Magic: `7f 45 4c 46 ...` (confirms it as an ELF file `45`:`E`, `4c`: `L`,
-  `46`: `F`).
+    `46`: `F`).
   - Type: `REL` (relocatable, not ready to run yet).
   - Machine: `x86_64` (or your system's architecture).
   - Entry Point: None (not applicable for REL files).
@@ -265,42 +267,42 @@ ELF Header:
 
 #### Section Headers
 
-  ```txt
-  Section Headers:
-  [Nr] Name              Type             Address           Offset
-       Size              EntSize          Flags  Link  Info  Align
-  [ 0]                   NULL             0000000000000000  00000000
-       0000000000000000  0000000000000000           0     0     0
-  [ 1] .text             PROGBITS         0000000000000000  00000040
-       000000000000001a  0000000000000000  AX       0     0     1
-  [ 2] .rela.text        RELA             0000000000000000  00000198
-       0000000000000030  0000000000000018   I      11     1     8
-  [ 3] .data             PROGBITS         0000000000000000  0000005a
-       0000000000000000  0000000000000000  WA       0     0     1
-  [ 4] .bss              NOBITS           0000000000000000  0000005a
-       0000000000000000  0000000000000000  WA       0     0     1
-  [ 5] .rodata           PROGBITS         0000000000000000  0000005a
-       000000000000000d  0000000000000000   A       0     0     1
-  [ 6] .comment          PROGBITS         0000000000000000  00000067
-       000000000000001c  0000000000000001  MS       0     0     1
-  [ 7] .note.GNU-stack   PROGBITS         0000000000000000  00000083
-       0000000000000000  0000000000000000           0     0     1
-  [ 8] .note.gnu.pr[...] NOTE             0000000000000000  00000088
-       0000000000000030  0000000000000000   A       0     0     8
-  [ 9] .eh_frame         PROGBITS         0000000000000000  000000b8
-       0000000000000038  0000000000000000   A       0     0     8
-  [10] .rela.eh_frame    RELA             0000000000000000  000001c8
-       0000000000000018  0000000000000018   I      11     9     8
-  [11] .symtab           SYMTAB           0000000000000000  000000f0
-       0000000000000090  0000000000000018          12     4     8
-  [12] .strtab           STRTAB           0000000000000000  00000180
-       0000000000000012  0000000000000000           0     0     1
-  [13] .shstrtab         STRTAB           0000000000000000  000001e0
-       0000000000000074  0000000000000000           0     0     1
-  ```
+```txt
+Section Headers:
+[Nr] Name              Type             Address           Offset
+     Size              EntSize          Flags  Link  Info  Align
+[ 0]                   NULL             0000000000000000  00000000
+     0000000000000000  0000000000000000           0     0     0
+[ 1] .text             PROGBITS         0000000000000000  00000040
+     000000000000001a  0000000000000000  AX       0     0     1
+[ 2] .rela.text        RELA             0000000000000000  00000198
+     0000000000000030  0000000000000018   I      11     1     8
+[ 3] .data             PROGBITS         0000000000000000  0000005a
+     0000000000000000  0000000000000000  WA       0     0     1
+[ 4] .bss              NOBITS           0000000000000000  0000005a
+     0000000000000000  0000000000000000  WA       0     0     1
+[ 5] .rodata           PROGBITS         0000000000000000  0000005a
+     000000000000000d  0000000000000000   A       0     0     1
+[ 6] .comment          PROGBITS         0000000000000000  00000067
+     000000000000001c  0000000000000001  MS       0     0     1
+[ 7] .note.GNU-stack   PROGBITS         0000000000000000  00000083
+     0000000000000000  0000000000000000           0     0     1
+[ 8] .note.gnu.pr[...] NOTE             0000000000000000  00000088
+     0000000000000030  0000000000000000   A       0     0     8
+[ 9] .eh_frame         PROGBITS         0000000000000000  000000b8
+     0000000000000038  0000000000000000   A       0     0     8
+[10] .rela.eh_frame    RELA             0000000000000000  000001c8
+     0000000000000018  0000000000000018   I      11     9     8
+[11] .symtab           SYMTAB           0000000000000000  000000f0
+     0000000000000090  0000000000000018          12     4     8
+[12] .strtab           STRTAB           0000000000000000  00000180
+     0000000000000012  0000000000000000           0     0     1
+[13] .shstrtab         STRTAB           0000000000000000  000001e0
+     0000000000000074  0000000000000000           0     0     1
+```
 
 - `.text`: The machine code for `main`, including a call to `printf` (placeholder
-address).
+  address).
 - `.rela.text`: Relocation entries for unresolved references.
   - Example: “At offset 0x5, fix the call to `printf`.”
 - `.rodata`: Read-only data, like the string `"Hello, World!\n"`.

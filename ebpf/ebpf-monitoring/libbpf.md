@@ -20,14 +20,14 @@ There are three major things in an BPF application.
 ### BPF lifecycle
 
 - **Open Phase**: BPF object file is parsed, BPF maps and global variables are
-discovered.
+  discovered.
 - **Load Phase**: BPF maps are created, resolves various relocations and BPF
-programs are verified and loaded into the kernel.
+  programs are verified and loaded into the kernel.
 - **Attachment Phase**: BPF programs that have been previous loaded into the
-kernel are now attached to the BPF hooks (tracepoints, kprobes, cgroups etc.).
-Now the BPF programs are actually running and performing their work.
+  kernel are now attached to the BPF hooks (tracepoints, kprobes, cgroups etc.).
+  Now the BPF programs are actually running and performing their work.
 - **Tear Down Phase**: Resources used by BPF are freed up by destroying the
-BPF maps and detaching + unloading the BPF programs from the kernel.
+  BPF maps and detaching + unloading the BPF programs from the kernel.
 
 ## Skeleton Files
 
@@ -56,14 +56,14 @@ and the interaction between user-space and kernel-space components in BPF
 
 - **Source Code:**
   - `*.bpf.c`: Files containing BPF programs that run in the Linux kernel
-  for tracing, monitoring, and networking.
+    for tracing, monitoring, and networking.
   - `*.c`: User-space application files that interact with BPF programs.
   - `*.h`: Header files shared between BPF and user-space code.
 - **Libraries:**
   - `../../libbpf/src`: Source code for `libbpf`, used for loading and managing
-  BPF programs.
+    BPF programs.
   - `../../blazesym/`: Source code for `libblazesym`, used for symbolization (if
-  `cargo` is available).
+    `cargo` is available).
 - **Tools:**
   - `../../bpftool/src`: Source code for `bpftool`, a utility for managing BPF objects.
 - **Generated Files:**
@@ -88,8 +88,8 @@ and the interaction between user-space and kernel-space components in BPF
 - `.output/*.bpf.o`: Stores compiled BPF instructions for kernel loading.
 - `.output/*.skel.h`: Simplifies user-space access to BPF program components.
 - `.output/*.o`: Contains compiled machine code for user-space applications.
-- `.output/libbpf.a`:** Provides compiled `libbpf` code for linking.
-- `.output/libblazesym_c.a`:** Provides compiled `libblazesym` code.
+- `.output/libbpf.a`:\*\* Provides compiled `libbpf` code for linking.
+- `.output/libblazesym_c.a`:\*\* Provides compiled `libblazesym` code.
 - `bpftool`: Command-line tool for BPF object inspection and management.
 - `minimal`, `uprobe`, etc.: Runnable programs utilizing BPF.
 
@@ -119,7 +119,7 @@ The `Makefile` manages compilation based on dependencies and timestamps:
 - **Application Linking (`.output/*.o` and `libbpf.a` to `minimal`, `uprobe`, etc.):**
   - Triggered by `all` target or application targets.
   - Uses `$(CC) $(CFLAGS) $^ $(ALL_LDFLAGS) -lelf -lz -o $@` to link object
-  files and `libbpf`.
+    files and `libbpf`.
 
 ## 4. How Many Object Files?
 
@@ -133,7 +133,7 @@ The `Makefile` manages compilation based on dependencies and timestamps:
 - BPF object files (`.output/*.bpf.o`) go into the kernel.
 - User-space applications load these files using `libbpf` functions.
 - `libbpf` sends system calls to load BPF bytecode into the kernel's BPF
-virtual machine.
+  virtual machine.
 - `bpftool` can also load BPF object files.
 
 ## 6. How Does a User-Space Object File Interact with the File Sent to Kernel Space?
