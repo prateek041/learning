@@ -4,21 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "105a350342d1623a",
+        "id": "4dc34e751c8be954",
         "type": "tabs",
         "children": [
           {
-            "id": "a804db0745093bee",
+            "id": "e34cfda04150428b",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "01_Projects/data-structures/trees/bfs.md",
-                "mode": "source",
-                "source": false
+                "file": "Beyla Configuration.canvas",
+                "viewState": {
+                  "x": 1474.2781116522854,
+                  "y": 1057.9506403326097,
+                  "zoom": -1.133333333333333
+                }
               },
-              "icon": "lucide-file",
-              "title": "bfs"
+              "icon": "lucide-layout-dashboard",
+              "title": "Beyla Configuration"
             }
           }
         ]
@@ -40,7 +43,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -77,7 +81,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "fffb0bbd4a9b823a",
@@ -163,11 +168,18 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "a804db0745093bee",
+  "active": "e34cfda04150428b",
   "lastOpenFiles": [
+    "Beyla Configuration.canvas",
+    "Mastering KVM.md",
+    "Migrating and Managing VMs using eBPF.md",
+    "03_Resources/ebpf/BPF Maps.md",
+    "Tale of Function Calls.md",
+    "Tale of an Executable.md",
+    "Instruction Sets.md",
+    "01_Projects/data-structures/trees/bfs.md",
     "01_Projects/data-structures/trees/Trees.md",
     "01_Projects/data-structures/trees/questions/226.Invert Binary Tree.md",
-    "01_Projects/data-structures/trees/bfs.md",
     "03_Resources/ebpf/learning-ebpf-chapter-4.md",
     "03_Resources/ebpf/learning-ebpf-kprobes.md",
     "01_Projects/Excalidraw/Egress path 2024-11-07 16.56.09.excalidraw.md",
@@ -186,19 +198,11 @@
     "01_Projects/Excalidraw",
     "01_Projects/Untitled.md",
     "01_Projects/Networks",
-    "01_Projects/data-structures/heaps/concepts/Heap.md",
     "01_Projects/data-structures/heaps/questions",
     "01_Projects/data-structures/heaps/concepts",
     "01_Projects/data-structures/heaps",
-    "03_Resources/ebpf/Chapter 2.md",
-    "03_Resources/ebpf/things-to-look-at.md",
-    "03_Resources/ebpf/chapter-3.md",
-    "03_Resources/ebpf/learning-ebpf-BPF-maps.md",
-    "03_Resources/ebpf/learning-ebpf-helloworld.md",
-    "03_Resources/ebpf/eBPF in Cloud Native.md",
     "01_Projects/gRPC",
     "01_Projects/writings/prateek",
-    "Untitled.canvas",
     "Excalidraw",
     "01_Projects/data-structures/trees/concepts",
     "03_Resources/go/singleton"
